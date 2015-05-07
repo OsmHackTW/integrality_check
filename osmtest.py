@@ -8,7 +8,7 @@ class OsmTestCase(unittest.TestCase):
 
 	def setUp(self):
 		# TODO: 載入資料庫設定檔
-		self.con = psycopg2.connect("dbname=osm")
+		self.con = psycopg2.connect(host='127.0.0.1', user='osm', password='osm4326', database='osm')
 		self.cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 	def tearDown(self):
