@@ -10,3 +10,11 @@ cd ~/pv2/integrality_check
 ### 建議環境
 * virtualenv 安裝於 ~/pv2
 * repo 位於 ~/pv2/integrality_check
+
+### 相依套件
+#### Ubuntu 14.04 LTS
+```sh
+sudo apt-get install postgresql-server-dev-9.3
+cd ~/pv2
+bin/pip install psycopg2
+```
