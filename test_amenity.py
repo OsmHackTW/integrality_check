@@ -32,13 +32,8 @@ class AmenityTestCase(osmtest.OsmTestCase):
 			msg = '找到 amenity 誤標記成 toilet 的廁所 (%s)' % summary
 			self.fail(msg)
 
-	## 沒命名也沒說明用途的地點 (高達 37520 個，先擱著晚點再測)
-	def test03_invalid_points(self):
-		sql = "SELECT count(*) FROM planet_osm_point WHERE amenity IS NULL AND name IS NULL"
-		pass
-
 	## amenity 疑似錯誤的地點
-	def test04_bad_amenities(self):
+	def test03_bad_amenities(self):
 		sql = '''
 			SELECT MIN(osm_id) osm_id, amenity, COUNT(*) cnt FROM planet_osm_point
 			WHERE amenity IS NOT NULL
@@ -50,8 +45,9 @@ class AmenityTestCase(osmtest.OsmTestCase):
 		bad_amenities = []
 		for r in rows:
 			if pat.match(r['amenity']) is None:
-				bad_amenities.append(r['amenity'])
+				detail = '    %s:%s' % (r['osm_id'], r['amenity'])
+				bad_amenities.append(detail)
 
 		if len(bad_amenities) > 0:
-			msg = '找到疑似錯誤的 amenity (%s)' % ', '.join(bad_amenities)
+			msg = '找到疑似錯誤的 amenity\n%s' % ',\n'.join(bad_amenities)
 			self.fail(msg)
