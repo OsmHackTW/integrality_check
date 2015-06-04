@@ -10,23 +10,24 @@ import json
 import urllib
 import time
 
+from chainsrc.ubike import UbikeSource
+
 begin = time.time()
 
-# 溫柔砍站指令 (重要資訊在網頁的 196 行)
-url = 'http://taipei.youbike.com.tw/cht/f12.php?loc=taipei'
-cmd = 'wget \'%s\' -q -O - | head -n 196 | tail -n 1 | grep  -o "\'.*\'"' % url
-
-# 資料結構化
-# trim > url decode > json decode
-p = os.popen(cmd,'r',8192)
-c = p.read().strip('\'\n')
-p.close()
-c = urllib.unquote(c)
-c = json.loads(c)
-
 # 顯示
-for key, item in c.items():
-	print('%s %s (%s,%s)' % (key, item ['sna'], item ['lat'], item['lng']))
+s = UbikeSource()
+
+'''
+for item in s.getPoints():
+	if u'後山' in item['name']:
+		print('[%d] %s %s (%s,%s)' % (item['osm_id'], item['ref'], item['name'], item ['lat'], item['lng']))
+
+for item in s.getDisappearedPoints():
+	if u'後山' in item['name']:
+		print('[%d] %s %s (%s,%s)' % (item['osm_id'], item['ref'], item['name'], item ['lat'], item['lng']))
+'''
+
+print(s.summary())
 
 elapsed = time.time() - begin
 print('取得 U-bike 站點資訊共花費 %.2f 秒' % elapsed)

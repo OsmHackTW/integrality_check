@@ -1,12 +1,12 @@
 # coding: utf-8
 
-import osmtest
+from cases.osmtest import OsmTestCase
 import re
 
 # 不顯示 stack trace
 __unittest = True
 
-class AmenityTestCase(osmtest.OsmTestCase):
+class AmenityTestCase(OsmTestCase):
 
 	## point 命名有廁所，但是 amenity 為 NULL
 	def test01_toilets_without_amenity(self):
