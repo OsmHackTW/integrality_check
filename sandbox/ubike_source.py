@@ -17,11 +17,11 @@ begin = time.time()
 # 顯示
 s = UbikeSource()
 
-'''
 for item in s.getPoints():
-	if u'後山' in item['name']:
-		print('[%d] %s %s (%s,%s)' % (item['osm_id'], item['ref'], item['name'], item ['lat'], item['lng']))
+	if u'港墘' in item['name']:
+		print('%s %s (%s,%s)' % (item['ref'], item['name'], item ['lat'], item['lng']))
 
+'''
 for item in s.getDisappearedPoints():
 	if u'後山' in item['name']:
 		print('[%d] %s %s (%s,%s)' % (item['osm_id'], item['ref'], item['name'], item ['lat'], item['lng']))
