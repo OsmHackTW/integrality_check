@@ -6,19 +6,22 @@ import unittest
 
 class OsmTestCase(unittest.TestCase):
 
+	## 初始配置
 	@classmethod
-	def setUp(self):
-		self.con = psycopg2.connect(host='127.0.0.1', user='osm', password='osm4326', database='osm')
-		self.cur = self.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
+	def setUpClass(cls):
+		# TODO: 看看是否支援 ~/.pgpass
+		OsmTestCase.con = psycopg2.connect(host='127.0.0.1', user='osm', password='osm4326', database='osm')
+		OsmTestCase.cur = cls.con.cursor(cursor_factory=psycopg2.extras.DictCursor)
 
+	## 結束配置
 	@classmethod
-	def tearDown(self):
-		self.cur.close()
-		self.con.close()
+	def tearDownClass(cls):
+		OsmTestCase.cur.close()
+		OsmTestCase.con.close()
 
 	## 查詢，返回 list > DictRow 結構
 	def query(self, sql):
-		cur = self.cur
+		cur = OsmTestCase.cur
 		cur.execute(sql)
 		return cur.fetchall()
 

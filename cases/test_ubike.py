@@ -6,35 +6,35 @@ from chainsrc.ubike import UbikeSource
 # 不顯示 stack trace
 __unittest = True
 
+## U-bike 圖資測試
 class UbikeTestCase(OsmTestCase):
 
+	## 取 U-bike 站點資料 (一次性)
 	@classmethod
-	def setUp(self):
-		super(UbikeTestCase,self).setUp()
-		self.src = UbikeSource()
+	def setUpClass(cls):
+		UbikeTestCase.src = UbikeSource()
 
-	@classmethod
-	def tearDown(self):
-		super(UbikeTestCase,self).tearDown()
-
+	## 測試新站點
 	def test01_new(self):
-		points = self.src.getNewPoints()
+		points = UbikeTestCase.src.getNewPoints()
 		if len(points)>0:
 			msg = '需要新增 U-bike 站 (%d)' % len(points)
 			for p in points:
 				msg = msg + '\n%s %s' % (p['ref'], p['name'])
 			self.fail(msg)
 
+	## 測試變更點
 	def test02_changed(self):
-		points = self.src.getChangedPoints()
+		points = UbikeTestCase.src.getChangedPoints()
 		if len(points)>0:
 			msg = '需要修改 U-bike 站 (%d)' % len(points)
 			for p in points:
 				msg = msg + '\n[%s] %s %s' % (p['osm_id'], p['ref'], p['name'])
 			self.fail(msg)
 
+	## 測試消失點
 	def test03_disappeared(self):
-		points = self.src.getDisappearedPoints()
+		points = UbikeTestCase.src.getDisappearedPoints()
 		if len(points)>0:
 			msg = '需要移除 U-bike 站 (%d)' % len(points)
 			for p in points:
