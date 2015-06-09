@@ -1,9 +1,12 @@
 # coding: utf-8
 
+import os
 import abc
+import sys
 import json
 import psycopg2
 import psycopg2.extras
+from osmapi import OsmApi
 
 ## 連鎖企業 POI 資料蒐集架構
 #  取得連鎖企業的最新 POI，以及和 PostGIS 比對 POI 是否需要 新增/修改/刪除
@@ -66,7 +69,90 @@ class ChainSource(object):
 
 	## 同步到 OSM Server
 	def sync(self):
-		pass
+		LIMIT = 10
+
+		# 注意!! 實驗階段指向測試伺服器
+		#host = 'api06.dev.openstreetmap.org'
+		host = 'api.openstreetmap.org'
+		user = 'virus.warnning@gmail.com'
+		pwf  = '%s/.osmpass' % os.environ['HOME']
+
+		# 注意!! 有中文的地方需要使用 unicode 字串型態
+		# TODO: comment 要使用 child class 提供的資訊
+		chset = {
+			u'comment':    u'自動同步 U-bike 租借站',
+			u'created_by': u'小璋流同步機器人 (osmapi/0.6.0)'
+		}
+
+		api = OsmApi(api=host, username=user, passwordfile=pwf)
+		api.ChangesetCreate(chset)
+
+		# TODO: 新增/修改/刪除，重構為單一迴圈呼叫三次
+
+		# create
+		count  = 0
+		failed = 0
+		total  = len(self.points_new)
+		for p in self.points_new:
+			node = self.toNode(p)
+			try:
+				api.NodeCreate(node)
+			except:
+				# TODO: 加入 logger 機制
+				failed = failed + 1
+			count = count + 1
+			print('\r新增: %d/%d (失敗: %d)' % (count, total, failed)),
+			sys.stdout.flush()
+			if count == LIMIT: break
+		print('')
+
+		# update
+		count  = 0
+		failed = 0
+		total  = len(self.points_changed)
+		for p in self.points_changed:
+			node = self.toNode(p, api)
+			if node is not None:
+				try:
+					api.NodeUpdate(node)
+				except:
+					# TODO: 加入 logger 機制
+					failed = failed + 1
+			else:
+				# TODO: 加入 logger 機制
+				failed = failed + 1
+			count = count + 1
+			print('\r修改: %d/%d (失敗: %d)' % (count, total, failed)),
+			sys.stdout.flush()
+			if count == LIMIT: break
+		print('')
+
+		return api.ChangesetClose()
+
+	## point 資料轉 API 需要的 node 格式
+	#
+	def toNode(self, point, api=None):
+		node = {
+			'lat': point['lat'],
+			'lon': point['lng']
+		}
+
+		tag = point.copy()
+		del tag['lat'], tag['lng']
+
+		# 更新與刪除模式，需要有 id 和 version 欄位
+		try:
+			if 'osm_id' in point:
+				onode = api.NodeGet(point['osm_id'])
+				node['id'] = point['osm_id']
+				node['version'] = onode['version']
+				del tag['osm_id']
+
+			node['tag'] = tag
+		except:
+			node = None
+
+		return node
 
 	## 載入資料源，也就是砍站動作
 	#  (子類別實作，負責變更 self.loaded 與 self.points)

@@ -4,6 +4,7 @@ import os
 import urllib
 import json
 from chainsrc.common import ChainSource
+from osmapi import OsmApi
 
 ## Ubike 圖資蒐集比對程式
 #
