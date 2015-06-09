@@ -76,7 +76,7 @@ class UbikeSource(ChainSource):
 		sql = '''
 			SELECT osm_id, name, ref, amenity, brand, operator, ST_AsText(way) loc
 			FROM planet_osm_point
-			WHERE ST_Distance(way,ST_GeomFromText('POINT(%s %s)',4326),true)<1
+			WHERE ST_Distance(way,ST_GeomFromText('POINT(%s %s)',4326),true)<5
 			AND amenity='bicycle_rental'
 		''' % (point['lng'], point['lat'])
 
