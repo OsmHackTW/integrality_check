@@ -19,13 +19,8 @@ s = UbikeSource()
 
 for item in s.getPoints():
 	if u'港墘' in item['name']:
-		print('%s %s (%s,%s)' % (item['ref'], item['name'], item ['lat'], item['lng']))
-
-'''
-for item in s.getDisappearedPoints():
-	if u'後山' in item['name']:
-		print('[%d] %s %s (%s,%s)' % (item['osm_id'], item['ref'], item['name'], item ['lat'], item['lng']))
-'''
+		print(json.dumps(item, indent=3, ensure_ascii=False))
+		print('%s %s (%s,%s)' % (item['ref'], item['name'], item ['lat'], item['lon']))
 
 print(s.summary())
 

@@ -3,6 +3,7 @@
 import os
 import urllib
 import json
+from pprint import pprint
 from chainsrc.common import ChainSource
 from osmapi import OsmApi
 
@@ -11,6 +12,8 @@ from osmapi import OsmApi
 # * 撤點功能暫不設計，因為很多新北市的點還是會算在台北市裡面，會不小心被撤掉
 #
 class UbikeSource(ChainSource):
+
+	source_name = u'YouBike 租借站'
 
 	## 載入 U-bike 資料源
 	#  (去官網砍站)
@@ -29,12 +32,14 @@ class UbikeSource(ChainSource):
 
 		for key, item in c.items():
 			point_dict = {
-				'name':    item['sna'],
-				'ref':     item['sno'],
-				'brand':   u'ubike',
-				'opertor': u'捷安特股份有限公司',
-				'lat':     item['lat'],
-				'lng':     item['lng'],
+				'lat':      item['lat'],
+				'lon':      item['lng'],
+				'name':     item['sna'],
+				'ref':      item['sno'],
+				'capacity': item['tot'],
+				'brand':    u'YouBike',
+				'opertor':  u'巨大機械工業(股)',
+				'network':  u'YouBike 微笑單車'
 			}
 			self.points.append(point_dict)
 
@@ -78,7 +83,7 @@ class UbikeSource(ChainSource):
 			FROM planet_osm_point
 			WHERE ST_Distance(way,ST_GeomFromText('POINT(%s %s)',4326),true)<5
 			AND amenity='bicycle_rental'
-		''' % (point['lng'], point['lat'])
+		''' % (point['lon'], point['lat'])
 
 		row = self.query(sql, True)
 		if row is None:

@@ -24,5 +24,5 @@ print('Changeset 編號: %d' % cid)
 print('URL: http://api06.dev.openstreetmap.org/changeset/%d' % cid)
 
 elapsed = time.time() - begin
-print('取得 U-bike 站點資訊共花費 %.2f 秒' % elapsed)
+print(u'同步 (%s) 共花費 %.2f 秒' % (s.source_name, elapsed))
 
