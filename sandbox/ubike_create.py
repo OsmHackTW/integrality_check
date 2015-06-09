@@ -9,6 +9,9 @@
 # 測試圖資
 # 0122 捷運港墘站(2號出口) (25.079681,121.575458)
 #
+# 新增 
+# 修改 要有 version
+# 刪除 要有 version, 不需要 tag
 
 import os
 from osmapi import OsmApi
@@ -25,20 +28,19 @@ chset = {
 }
 
 node = {
-	u'lat': 25.079681,
-	u'lon': 121.575458,
-	u'tag': {
-		u'name':     u'捷運港墘站(2號出口)',
-		u'ref':      u'0122',
-		u'amenity':  u'bicycle_rental',
-		u'brand':    u'微笑單車',
-		u'operator': u'巨大機械工業股份有限公司'
-	}
+	u'id':  4299484763,
+	u'lat': 25.10,
+	u'lon': 121.0,
+	u'version': 1,
 }
 
 api = OsmApi(api=host, username=user, passwordfile=pwf)
 api.ChangesetCreate(chset)
-n = api.NodeCreate(node)
+n = api.NodeGet(4299484799)
+n = api.NodeDelete(n)
+print(n)
+#n = api.NodeUpdate(node)
+#n = api.NodeDelete(node)
 cid = api.ChangesetClose()
 
 # 更新結果摘要
