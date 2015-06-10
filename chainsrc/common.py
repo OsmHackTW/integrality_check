@@ -72,11 +72,11 @@ class ChainSource(object):
 
 	## 同步到 OSM Server
 	def sync(self):
-		LIMIT = 3 # 每一種同步動作的次數限制，除錯用
+		LIMIT = 10 # 每一種同步動作的次數限制，除錯用
 
 		# 注意!! 實驗階段指向測試伺服器
-		host = 'api06.dev.openstreetmap.org'
-		#host = 'api.openstreetmap.org'
+		#host = 'api06.dev.openstreetmap.org'
+		host = 'api.openstreetmap.org'
 		user = 'virus.warnning@gmail.com'
 		pwf  = '%s/.osmpass' % os.environ['HOME']
 
