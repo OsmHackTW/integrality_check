@@ -72,7 +72,7 @@ class ChainSource(object):
 
 	## 同步到 OSM Server
 	def sync(self):
-		LIMIT = 10 # 每一種同步動作的次數限制，除錯用
+		LIMIT = 0 # 每一種同步動作的次數限制，除錯用
 
 		# 注意!! 實驗階段指向測試伺服器
 		#host = 'api06.dev.openstreetmap.org'
