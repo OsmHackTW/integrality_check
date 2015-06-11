@@ -12,6 +12,7 @@
 # * OS X Yosemite 10.10.3
 
 import os
+import sys
 import hashlib
 from os.path import expanduser
 
