@@ -51,6 +51,8 @@ def isUpdated():
 ## 更新圖資，並且檢查 MD5，如果檔案完整就回傳 True
 #  (注意! 因為 OSX 缺少 md5sum 指令，所以統一用 hashlib 計算 MD5 摘要)
 def updateOSM():
+    print('下載圖資')
+    sys.stdout.flush()
     os.system('wget -nv %s -O %s' % (URL_FILE, LOCAL_FILE))        # 下載圖資
     md5sum = hashlib.md5(open(LOCAL_FILE,'rb').read()).hexdigest() # 比對 MD5
     ret = os.system('grep %s %s' % (md5sum, MD5_CURR))             
@@ -68,6 +70,7 @@ if isUpdated():
             print('圖資下載失敗')
             exit(1)
     print('圖資下載成功，匯入到 PostGIS')
+    sys.stdout.flush()
 
     # 匯入到 PostgreSQL
     # 使用較保守的參數，避免在便宜的雲端空間撐爆記憶體
@@ -78,7 +81,6 @@ if isUpdated():
     params  = (DB_HOST, DB_USER, DB_NAME, LOCAL_FILE)
     os.system(command % params)
     print('匯入完成')
-
     exit(0)
 else:
     print('圖資沒更新，不需要下載')
