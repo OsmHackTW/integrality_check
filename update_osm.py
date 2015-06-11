@@ -73,7 +73,7 @@ if isUpdated():
     # 使用較保守的參數，避免在便宜的雲端空間撐爆記憶體
     command = '''
         osm2pgsql --cache 256 --cache-strategy sparse \
-            -l -H %s -U %s -d %s %s
+            -l -k -H %s -U %s -d %s %s
     '''
     params  = (DB_HOST, DB_USER, DB_NAME, LOCAL_FILE)
     os.system(command % params)
