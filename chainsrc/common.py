@@ -12,6 +12,7 @@ from osmapi import OsmApi
 #  取得連鎖企業的最新 POI，以及和 PostGIS 比對 POI 是否需要 新增/修改/刪除
 #
 #  @todo 設計 cache 機制，用 SQLite
+#  @todo 去重複化
 #
 class ChainSource(object):
 
@@ -83,14 +84,15 @@ class ChainSource(object):
 		# 注意!! 有中文的地方需要使用 unicode 字串型態
 		chset = {
 			u'comment':    u'自動同步 (%s)' % self.source_name,
-			u'created_by': u'小璋流同步機器人 (osmapi/0.6.0)'
+			u'created_by': u'小璋流同步機器人 (osmapi/0.6.0)',
+			u'bot':        u'yes'
 		}
 
 		api = OsmApi(api=host, username=user, passwordfile=pwf)
 		api.ChangesetCreate(chset)
 
 		# 新增/修改/刪除
-		actions = ('create', 'update')
+		actions = ['create', 'update', 'delete']
 		points_map = {
 			'create': self.points_new,
 			'update': self.points_changed,

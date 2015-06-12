@@ -48,7 +48,7 @@ class UbikeSource(ChainSource):
 	def loadDisappearedPoints(self):
 		# 全台北市 U-bike 點
 		sql = '''
-			SELECT osm_id, name, ref, ST_Y(way) lat, ST_X(way) lng FROM planet_osm_point
+			SELECT osm_id, name, ref, ST_Y(way) lat, ST_X(way) lon FROM planet_osm_point
 			WHERE amenity='bicycle_rental' AND ref IS NOT NULL
 			AND ST_Contains((SELECT way FROM planet_osm_polygon WHERE name='臺北市'), way)
 		'''
@@ -92,6 +92,7 @@ class UbikeSource(ChainSource):
 		# 確定該點存在，記錄 osm_id 供事後產生 UPDATE SQL 使用
 		point['osm_id'] = row['osm_id']
 
+		# TODO: 補充 network 與 capacity 檢查
 		changed = False
 		for k in ['name', 'ref', 'brand', 'operator']:
 			field = u'' if row[k] is None else unicode(row[k],'utf-8')
