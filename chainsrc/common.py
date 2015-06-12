@@ -128,6 +128,8 @@ class ChainSource(object):
 
 	## point 資料轉 API 需要的 node 格式
 	#
+	#  @todo 暫時性地砍掉 opertor 屬性，補救錯誤用
+	#
 	def toNode(self, point, api=None):
 		tag = point.copy()
 		lat = tag['lat']

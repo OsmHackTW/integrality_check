@@ -38,7 +38,7 @@ class UbikeSource(ChainSource):
 				'ref':      item['sno'],
 				'capacity': item['tot'],
 				'brand':    u'YouBike',
-				'opertor':  u'巨大機械工業(股)',
+				'operator': u'巨大機械工業(股)',
 				'network':  u'YouBike 微笑單車'
 			}
 			self.points.append(point_dict)
